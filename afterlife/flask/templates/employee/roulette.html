@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>환생 룰렛 | 사후세계 관리 사무소</title>
+  <style>
+    body { font-family: 'Batang', serif; background: #0d0d0d; color: #e0e0e0; margin: 0; padding: 0; }
+    header { background: #1a1a1a; padding: 20px 40px; border-bottom: 2px solid #333; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 20px; color: #c9a84c; margin: 0; }
+    nav a { color: #c9a84c; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .container { max-width: 600px; margin: 60px auto; padding: 0 20px; }
+    h2 { color: #c9a84c; margin-bottom: 28px; }
+    .box { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 32px; margin-bottom: 24px; }
+    label { font-size: 13px; color: #888; display: block; margin-bottom: 6px; }
+    select, input { width: 100%; padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #e0e0e0; font-size: 14px; box-sizing: border-box; margin-bottom: 18px; }
+    button { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a84c; border-radius: 6px; color: #c9a84c; font-size: 15px; cursor: pointer; }
+    button:hover { background: #333; }
+    .prob-row { display: flex; gap: 12px; }
+    .prob-row > div { flex: 1; }
+    .result { text-align: center; padding: 32px; }
+    .result .emoji { font-size: 64px; }
+    .result .label { font-size: 20px; color: #c9a84c; margin-top: 12px; }
+    .result p { color: #555; font-size: 13px; margin-top: 8px; }
+    .warning { font-size: 11px; color: #555; margin-top: -12px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>⚰️ 환생 배정 룰렛</h1>
+  <nav>
+    <a href="/employee/dashboard">대시보드</a>
+    <a href="/logout">로그아웃</a>
+  </nav>
+</header>
+<div class="container">
+  <h2>🎰 환생 배정 시스템</h2>
+  <div class="box">
+    <form method="POST">
+      <label>영혼 선택</label>
+      <select name="soul_id">
+        {% for soul in souls %}
+        <option value="{{ soul.id }}">{{ soul.name }} (ID: {{ soul.id }})</option>
+        {% endfor %}
+      </select>
+
+      <label>확률 설정 (합계 = 1.0)</label>
+      <!-- 취약점: 확률값을 클라이언트에서 직접 받음 → 파라미터 변조 가능 -->
+      <div class="prob-row">
+        <div>
+          <label>인간 확률</label>
+          <input type="number" name="prob_human" value="0.33" step="0.01" min="0" max="1">
+        </div>
+        <div>
+          <label>동물 확률</label>
+          <input type="number" name="prob_animal" value="0.33" step="0.01" min="0" max="1">
+        </div>
+        <div>
+          <label>식물 확률</label>
+          <input type="number" name="prob_plant" value="0.34" step="0.01" min="0" max="1">
+        </div>
+      </div>
+      <p class="warning">※ 확률 합계가 1.0이 되도록 설정하세요</p>
+      <button type="submit">🎰 룰렛 돌리기</button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="box result">
+    {% if result == 'human' %}
+      <div class="emoji">👤</div>
+      <div class="label">인간으로 환생</div>
+    {% elif result == 'animal' %}
+      <div class="emoji">🐾</div>
+      <div class="label">동물로 환생</div>
+    {% else %}
+      <div class="emoji">�
