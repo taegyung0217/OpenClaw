@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: afterlife1234
+      MYSQL_DATABASE: afterlife
+      MYSQL_USER: soul
+      MYSQL_PASSWORD: soul1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  web:
+    build: ./flask
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: soul
+      DB_PASSWORD: soul1234
+      DB_NAME: afterlife

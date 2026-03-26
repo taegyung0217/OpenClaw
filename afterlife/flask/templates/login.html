@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 | 사후세계 관리 사무소</title>
+  <style>
+    body { font-family: 'Batang', serif; background: #1a1a2e; color: #e0e0e0; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+    .box { background: #16213e; border: 1px solid #0f3460; border-radius: 12px; padding: 40px; width: 360px; }
+    h2 { color: #a8d8ea; text-align: center; margin-bottom: 28px; }
+    label { font-size: 13px; color: #aaa; display: block; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px; background: #1a1a2e; border: 1px solid #0f3460; border-radius: 6px; color: #e0e0e0; font-size: 14px; box-sizing: border-box; margin-bottom: 18px; }
+    button { width: 100%; padding: 12px; background: #0f3460; border: none; border-radius: 6px; color: #a8d8ea; font-size: 15px; cursor: pointer; }
+    button:hover { background: #1a4a7a; }
+    .error { color: #ff6b6b; font-size: 13px; text-align: center; margin-bottom: 12px; }
+    .links { text-align: center; margin-top: 16px; font-size: 13px; }
+    .links a { color: #a8d8ea; text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h2>⚖️ 영혼 로그인</h2>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  <form method="POST">
+    <label>이메일</label>
+    <input type="text" name="email" placeholder="영혼 등록 이메일">
+    <label>비밀번호</label>
+    <input type="password" name="password" placeholder="비밀번호">
+    <button type="submit">로그인</button>
+  </form>
+  <div class="links">
+    <a href="/register">아직 등록 안 하셨나요? 영혼 등록하기</a>
+  </div>
+</div>
+</body>
+</html>
