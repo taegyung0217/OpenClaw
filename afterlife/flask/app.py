@@ -117,3 +117,7 @@ def comment(post_id):
         return redirect(url_for('login'))
     content = request.form['content']
     db = get_db()
+
+# 파일 맨 마지막에 추가
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=True)
