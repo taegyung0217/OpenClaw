@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>직원 로그인 | 사후세계 관리 사무소</title>
+  <style>
+    body { font-family: 'Batang', serif; background: #0d0d0d; color: #e0e0e0; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+    .box { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 40px; width: 360px; }
+    h2 { color: #c9a84c; text-align: center; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #555; font-size: 12px; margin-bottom: 28px; }
+    label { font-size: 13px; color: #888; display: block; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px; background: #0d0d0d; border: 1px solid #333; border-radius: 6px; color: #e0e0e0; font-size: 14px; box-sizing: border-box; margin-bottom: 18px; }
+    button { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a84c; border-radius: 6px; color: #c9a84c; font-size: 15px; cursor: pointer; }
+    button:hover { background: #333; }
+    .error { color: #ff6b6b; font-size: 13px; text-align: center; margin-bottom: 12px; }
+    .back { text-align: center; margin-top: 16px; font-size: 13px; }
+    .back a { color: #555; text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h2>⚰️ 직원 전용</h2>
+  <div class="subtitle">저승사자 인증 시스템</div>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  <form method="POST">
+    <label>직원명</label>
+    <input type="text" name="name" placeholder="직원명을 입력하세요">
+    <label>비밀번호</label>
+    <input type="password" name="password" placeholder="비밀번호를 입력하세요">
+    <button type="submit">로그인</button>
+  </form>
+  <div class="back">
+    <a href="/">← 일반 페이지로 돌아가기</a>
+  </div>
+</div>
+</body>
+</html>

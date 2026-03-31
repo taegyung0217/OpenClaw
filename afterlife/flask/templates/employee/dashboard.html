@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>직원 대시보드 | 사후세계 관리 사무소</title>
+  <style>
+    body { font-family: 'Batang', serif; background: #0d0d0d; color: #e0e0e0; margin: 0; padding: 0; }
+    header { background: #1a1a1a; padding: 20px 40px; border-bottom: 2px solid #333; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 20px; color: #c9a84c; margin: 0; }
+    nav a { color: #c9a84c; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
+    h2 { color: #c9a84c; margin-bottom: 24px; }
+    .stats { display: flex; gap: 16px; margin-bottom: 32px; }
+    .stat-box { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 20px; flex: 1; text-align: center; }
+    .stat-box .number { font-size: 32px; color: #c9a84c; }
+    .stat-box .label { font-size: 12px; color: #555; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; background: #1a1a1a; border-radius: 8px; overflow: hidden; }
+    th { background: #222; color: #c9a84c; padding: 12px 16px; text-align: left; font-size: 13px; }
+    td { padding: 12px 16px; border-bottom: 1px solid #222; font-size: 13px; color: #ccc; }
+    tr:last-child td { border-bottom: none; }
+    .role-badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+    .role-soul { background: #1a3a1a; color: #5a9a5a; }
+    .role-admin { background: #3a1a1a; color: #c9a84c; }
+    .menu { display: flex; gap: 12px; margin-bottom: 32px; }
+    .menu a { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px 20px; color: #c9a84c; text-decoration: none; font-size: 14px; }
+    .menu a:hover { border-color: #c9a84c; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>⚰️ 직원 대시보드</h1>
+  <nav>
+    <span>{{ session.get('emp_name') }} ({{ session.get('emp_rank') }})</span>
+    <a href="/employee/roulette">환생 룰렛</a>
+    <a href="/logout">로그아웃</a>
+  </nav>
+</header>
+<div class="container">
+  <div class="stats">
+    <div class="stat-box">
+      <div class="number">{{ souls|length }}</div>
+      <div class="label">등록된 영혼 수</div>
+    </div>
+    <div class="stat-box">
+      <div class="number">{{ session.get('emp_rank') }}</div>
+      <div class="label">내 직급</div>
+    </div>
+  </div>
+
+  <div class="menu">
+    <a href="/employee/roulette">🎰 환생 배정 룰렛</a>
+    <a href="/board">📋 게시판 관리</a>
+  </div>
+
+  <h2>👻 등록된 영혼 목록</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>이름</th>
+      <th>이메일</th>
+      <th>권한</th>
+      <th>카르마</th>
+      <th>등록일</th>
+    </tr>
+    {% for soul in souls %}
+    <tr>
+      <td>{{ soul.id }}</td>
+      <td>{{ soul.name }}</td>
+      <td>{{ soul.email }}</td>
+      <td><span class="role-badge role-{{ soul.role }}">{{ soul.role }}</span></td>
+      <td>{{ soul.karma_score }}</td>
+      <td>{{ soul.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>정착 가이드 | 사후세계 관리 사무소</title>
+  <style>
+    body { font-family: 'Batang', serif; background: #1a1a2e; color: #e0e0e0; margin: 0; padding: 0; }
+
+    header {
+      background: #16213e;
+      padding: 20px 40px;
+      border-bottom: 2px solid #0f3460;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 { font-size: 22px; color: #a8d8ea; margin: 0; }
+
+    nav a {
+      color: #a8d8ea;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .hero h2 { font-size: 28px; color: #a8d8ea; }
+    .hero p { color: #aaa; font-size: 15px; margin-top: 10px; }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .write-box {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 30px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      background: #1a1a2e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      color: #e0e0e0;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #0f3460;
+      border: none;
+      border-radius: 6px;
+      color: #a8d8ea;
+      cursor: pointer;
+    }
+
+    .post-card {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .post-card:hover {
+      border-color: #a8d8ea;
+    }
+
+    .post-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .post-title {
+      font-size: 18px;
+      color: #a8d8ea;
+      margin-bottom: 6px;
+    }
+
+    .post-meta {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .empty {
+      text-align: center;
+      color: #555;
+      padding: 40px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 12px;
+      border-top: 1px solid #0f3460;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>⚖️ 사후세계 환생 관리 사무소</h1>
+  <nav>
+    {% if session.get('name') %}
+      <span>{{ session['name'] }} 님</span>
+      <a href="/logout">로그아웃</a>
+    {% else %}
+      <a href="/login">로그인</a>
+      <a href="/register">회원가입</a>
+    {% endif %}
+    <a href="/">홈</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h2>📋 정착 가이드 게시판</h2>
+  <p>사후세계 생활에 필요한 정보를 공유하세요</p>
+</div>
+
+<div class="container">
+
+  {% if session.get('name') %}
+  <div class="write-box">
+    <form method="POST" action="/board/write">
+      <input type="text" name="title" placeholder="제목" required>
+      <textarea name="content" placeholder="내용을 입력하세요" required></textarea>
+      <button type="submit">작성하기</button>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if posts %}
+    {% for post in posts %}
+      <div class="post-card">
+        <a href="/board/{{ post.id }}">
+          <div class="post-title">{{ post.title }}</div>
+          <div class="post-meta">{{ post.name }} · {{ post.created_at }}</div>
+        </a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty">아직 작성된 글이 없습니다.</div>
+  {% endif %}
+
+</div>
+
+<footer>
+  사후세계 환생 관리 사무소 | 저승부 공식 사이트
+</footer>
+
+</body>
+</html>
