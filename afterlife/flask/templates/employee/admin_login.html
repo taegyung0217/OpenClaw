@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>직원 로그인 | 사후세계 관리 사무소</title>
+  <style>
+    body { font-family: 'Batang', serif; background: #0d0d0d; color: #e0e0e0; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+    .box { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 40px; width: 320px; box-sizing: border-box; }
+    h2 { color: #c9a84c; text-align: center; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #555; font-size: 13px; margin-bottom: 30px; }
+    label { font-size: 13px; color: #888; display: block; margin-bottom: 6px; }
+    input { width: 100%; padding: 12px; background: #0d0d0d; border: 1px solid #333; color: #fff; margin-bottom: 20px; box-sizing: border-box; border-radius: 4px; }
+    input:focus { outline: none; border-color: #c9a84c; }
+    button { width: 100%; padding: 14px; background: #2a2a2a; border: 1px solid #444; color: white; cursor: pointer; border-radius: 4px; font-family: 'Batang', serif; font-size: 15px; transition: 0.3s; }
+    button:hover { background: #333; border-color: #c9a84c; color: #c9a84c; }
+    
+    /* 에러 메시지 스타일 (Flask에서 error 변수를 넘겨줄 때만 보임) */
+    .error { color: #8B0000; font-size: 13px; text-align: center; margin-bottom: 15px; padding: 10px; border: 1px solid #8B0000; background: rgba(139,0,0,0.1); border-radius: 4px; }
+    
+    .back { text-align: center; margin-top: 20px; font-size: 13px; }
+    .back a { color: #555; text-decoration: none; transition: 0.2s; }
+    .back a:hover { color: #e0e0e0; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>직원 전용</h2>
+  <div class="subtitle">저승사자 인증 시스템</div>
+  
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST" action="/admin_login">
+    <label>직위 (직원명)</label>
+    <input type="text" name="username" placeholder="직위 또는 성명을 입력하시오" required>
+    
+    <label>암구호 (비밀번호)</label>
+    <input type="password" name="password" placeholder="암구호를 입력하시오" required>
+    
+    <button type="submit">직인 찍기 (로그인)</button>
+  </form>
+
+  <div class="back">
+    <a href="/">← 이승 페이지로 돌아가기</a>
+  </div>
+</div>
+
+</body>
+</html>
