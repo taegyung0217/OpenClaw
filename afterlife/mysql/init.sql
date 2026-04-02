@@ -1,3 +1,5 @@
+SET CHARACTER SET utf8mb4;
+
 CREATE DATABASE IF NOT EXISTS afterlife;
 USE afterlife;
 
@@ -51,5 +53,5 @@ INSERT INTO souls (name, email, password_hash, role, karma_score) VALUES
 ('나쁜놈', 'bad@afterlife.com', 'password123', 'soul', -999);
 
 INSERT INTO employees (name, password_hash, position) VALUES
-('저승사자A', 'employee123', 'junior'),
+('testing', 'employee123', 'junior'),
 ('염라대왕', 'admin1234', 'chief');

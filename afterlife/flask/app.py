@@ -11,6 +11,7 @@ def get_db():
         user=os.environ.get('DB_USER', 'soul'),
         password=os.environ.get('DB_PASSWORD', 'soul1234'),
         database=os.environ.get('DB_NAME', 'afterlife'),
+        charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor
     )
 
