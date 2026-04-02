@@ -1,37 +1,24 @@
-
-
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>사후세계 환생 관리 사무소</title>
   <style>
-    body { font-family: 'Batang', serif; background: #1a1a2e; color: #e0e0e0; margin: 0; }
-    header { 
-      background: #16213e; padding: 20px 40px; border-bottom: 2px solid #0f3460; 
-      display: flex; justify-content: space-between; align-items: center; 
-    }
+    body { font-family: 'Batang', serif; background: #1a1a2e; color: #e0e0e0; margin: 0; padding: 0; }
+    header { background: #16213e; padding: 20px 40px; border-bottom: 2px solid #0f3460; display: flex; justify-content: space-between; align-items: center; }
     header h1 { font-size: 22px; color: #a8d8ea; margin: 0; }
-    nav { display: flex; align-items: center; gap: 20px; }
-    nav a { color: #a8d8ea; text-decoration: none; font-size: 15px; }
-    nav a:hover { text-decoration: underline; color: #fff; }
-    .login-btn { 
-      background: #0f3460; color: #a8d8ea; border: 1px solid #a8d8ea; 
-      padding: 8px 16px; border-radius: 4px; cursor: pointer; 
-      font-family: 'Batang', serif; font-size: 14px; transition: 0.3s; 
-    }
-    .login-btn:hover { background: #a8d8ea; color: #16213e; }
+    nav a { color: #a8d8ea; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    nav a:hover { text-decoration: underline; }
     .hero { text-align: center; padding: 80px 20px; }
     .hero h2 { font-size: 32px; color: #a8d8ea; }
     .hero p { color: #aaa; font-size: 16px; margin-top: 12px; }
-    .cards { display: flex; justify-content: center; gap: 24px; padding: 40px; }
-    .card { background: #16213e; border: 1px solid #0f3460; border-radius: 12px; padding: 20px; width: 220px; text-align: center; transition: 0.3s; }
-    .card:hover { border-color: #a8d8ea; transform: translateY(-5px); }
-    .card h3 { font-size: 18px; color: #a8d8ea; margin-bottom: 8px; }
-    .card p { font-size: 13px; color: #888; margin: 0; }
-    .card a { text-decoration: none; color: inherit; display: block; height: 100%; }
-    footer { text-align: center; padding: 20px; color: #555; font-size: 13px; border-top: 1px solid #0f3460; margin-top: 40px; }
+    .cards { display: flex; justify-content: center; gap: 24px; padding: 40px; flex-wrap: wrap; }
+    .card { background: #16213e; border: 1px solid #0f3460; border-radius: 12px; padding: 28px; width: 200px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+    .card:hover { border-color: #a8d8ea; }
+    .card h3 { font-size: 16px; color: #a8d8ea; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: #888; }
+    .card a { text-decoration: none; color: inherit; }
+    footer { text-align: center; padding: 20px; color: #555; font-size: 12px; border-top: 1px solid #0f3460; margin-top: 40px; }
   </style>
 </head>
 <body>
@@ -39,13 +26,13 @@
   <h1>⚖️ 사후세계 환생 관리 사무소</h1>
   <nav>
     {% if session.get('name') %}
-      <span style="color: #fff;">{{ session['name'] }} 영혼님</span>
+      <span>{{ session['name'] }} 님</span>
       <a href="/logout">로그아웃</a>
     {% else %}
-      <a href="/login">일반 로그인</a>
+      <a href="/login">로그인</a>
       <a href="/register">회원가입</a>
     {% endif %}
-    <button class="login-btn" onclick="location.href='/admin_login'">직원 전용 (저승사자)</button>
+    <a href="/employee/login">직원 전용</a>
   </nav>
 </header>
 <div class="hero">
@@ -53,9 +40,9 @@
   <p>환생 대기 번호표 발급 및 사후세계 정착 가이드를 제공합니다.</p>
 </div>
 <div class="cards">
-  <div class="card"><a href="#"><h3>🎫 환생 대기열</h3><p>번호표를 발급받고 순서를 확인하세요.</p></a></div>
-  <div class="card"><a href="#"><h3>📋 정착 가이드</h3><p>사후세계 생활 안내서를 열람합니다.</p></a></div>
-  <div class="card"><a href="#"><h3>📝 영혼 등록</h3><p>처음 오셨나요? 기본 정보를 등록하세요.</p></a></div>
+  <div class="card"><a href="/queue"><h3>🎫 환생 대기열</h3><p>번호표를 발급받고 대기 현황을 확인하세요</p></a></div>
+  <div class="card"><a href="/board"><h3>📋 정착 가이드</h3><p>사후세계 생활 안내 게시판</p></a></div>
+  <div class="card"><a href="/register"><h3>📝 영혼 등록</h3><p>처음 오셨나요? 영혼을 등록하세요</p></a></div>
 </div>
 <footer>사후세계 환생 관리 사무소 | 저승부 공식 사이트 | 민원 문의: 0000-0000</footer>
 </body>

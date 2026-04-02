@@ -18,11 +18,8 @@
 </head>
 <body>
 <div class="box">
-  <button onclick="window.location.href='index.html'" style="background: none; border: 1px solid #555; color: #aaa; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
-    ← 메인 화면으로
-  </button>
   <h2>⚖️ 영혼 로그인</h2>
-  <div class="error"></div>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
   <form method="POST">
     <label>이메일</label>
     <input type="text" name="email" placeholder="영혼 등록 이메일">

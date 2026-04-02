@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS afterlife;
+USE afterlife;
+
 CREATE TABLE IF NOT EXISTS souls (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -13,7 +16,7 @@ CREATE TABLE IF NOT EXISTS employees (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     password_hash VARCHAR(255),
-    rank ENUM('junior', 'senior', 'chief') DEFAULT 'junior',
+    position ENUM('junior', 'senior', 'chief') DEFAULT 'junior',
     annual_leave INT DEFAULT 15,
     session_token VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -43,11 +46,10 @@ CREATE TABLE IF NOT EXISTS comments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 더미 데이터
 INSERT INTO souls (name, email, password_hash, role, karma_score) VALUES
 ('홍길동', 'hong@afterlife.com', 'password123', 'soul', 30),
 ('나쁜놈', 'bad@afterlife.com', 'password123', 'soul', -999);
 
-INSERT INTO employees (name, password_hash, rank) VALUES
+INSERT INTO employees (name, password_hash, position) VALUES
 ('저승사자A', 'employee123', 'junior'),
 ('염라대왕', 'admin1234', 'chief');
