@@ -85,7 +85,7 @@ def board():
     posts = cursor.fetchall()
     return render_template('board.html', posts=posts)
 
-@app.route('/write', methods=['GET', 'POST'])
+@app.route('/board/write', methods=['GET', 'POST'])
 def write():
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -128,6 +128,57 @@ def comment(post_id):
 
     return redirect(url_for('post', post_id=post_id))
 
-# 파일 맨 마지막에 추가
+
+    
+    
+##########
+
+    
+# ── 직원 전용 기능 ──────────────────────────────────
+
+@app.route('/employee/login', methods=['GET', 'POST'])  # /admin/login → /employee/login 으로 통일
+def admin_login():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        password = request.form.get('password')
+        db = get_db()
+        cursor = db.cursor()
+        query = f"SELECT * FROM employees WHERE name='{name}' AND password_hash='{password}'"
+        cursor.execute(query)
+        employee = cursor.fetchone()
+        if employee:
+            session['emp_id'] = employee['id']
+            session['emp_name'] = employee['name']
+            session['emp_rank'] = employee['position']
+            return redirect(url_for('admin_dashboard'))
+        return render_template('employee/admin_login.html', error="인증 정보가 올바르지 않습니다.")
+    return render_template('employee/admin_login.html')
+
+
+@app.route('/employee/dashboard')
+def admin_dashboard():
+    if 'emp_id' not in session:
+        return redirect(url_for('admin_login'))
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM souls")
+    souls = cursor.fetchall()
+    return render_template('employee/dashboard.html', souls=souls)
+
+
+@app.route('/employee/roulette', methods=['GET', 'POST'])
+def admin_roulette():
+    if 'emp_id' not in session:
+        return redirect(url_for('admin_login'))
+    db = get_db()
+    cursor = db.cursor()
+    if request.method == 'POST':
+        return redirect(url_for('admin_dashboard'))
+    cursor.execute("SELECT * FROM souls")
+    souls = cursor.fetchall()
+    return render_template('employee/roulette.html', souls=souls)
+
+
+# 파일 맨 마지막
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

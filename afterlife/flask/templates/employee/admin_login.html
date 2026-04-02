@@ -32,9 +32,9 @@
     <div class="error">{{ error }}</div>
   {% endif %}
 
-  <form method="POST" action="/admin_login">
+  <form method="POST" action="/employee/login">
     <label>직위 (직원명)</label>
-    <input type="text" name="username" placeholder="직위 또는 성명을 입력하시오" required>
+    <input type="text" name="name" placeholder="직위 또는 성명을 입력하시오" required>
     
     <label>암구호 (비밀번호)</label>
     <input type="password" name="password" placeholder="암구호를 입력하시오" required>
