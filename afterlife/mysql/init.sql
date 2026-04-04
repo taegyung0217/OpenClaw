@@ -54,4 +54,4 @@ INSERT INTO souls (name, email, password_hash, role, karma_score) VALUES
 
 INSERT INTO employees (name, password_hash, position) VALUES
 ('testing', 'employee123', 'junior'),
-('염라대왕', 'admin1234', 'chief');
+('admin', 'admin1234', 'chief');
