@@ -7,7 +7,7 @@ app.secret_key = 'supersecretkey'
 
 def get_db():
     return pymysql.connect(
-        host=os.environ.get('DB_HOST', '127.0.0.1'),
+        host=os.environ.get('DB_HOST', 'db'), # 도커 환경이므로 'db'가 기본값인 것이 좋습니다.
         user=os.environ.get('DB_USER', 'soul'),
         password=os.environ.get('DB_PASSWORD', 'soul1234'),
         database=os.environ.get('DB_NAME', 'afterlife'),
@@ -29,8 +29,8 @@ def register():
         password = request.form['password']
         db = get_db()
         cursor = db.cursor()
-        # 취약점: SQL injection (password 미sanitize)
-        query = f"INSERT INTO souls (name, email, password_hash) VALUES ('{name}', '{email}', '{password}')"
+        # SQL Injection 취약점 유지 (교육용)
+        query = f"INSERT INTO souls (name, email, password_hash, alignment) VALUES ('{name}', '{email}', '{password}', '무')"
         cursor.execute(query)
         db.commit()
         return redirect(url_for('login'))
@@ -44,7 +44,7 @@ def login():
         password = request.form['password']
         db = get_db()
         cursor = db.cursor()
-        # 취약점: SQL injection (로그인 bypass 가능)
+        # SQL Injection 취약점 유지 (교육용)
         query = f"SELECT * FROM souls WHERE email='{email}' AND password_hash='{password}'"
         cursor.execute(query)
         user = cursor.fetchone()
@@ -69,7 +69,6 @@ def queue():
         soul_id = request.form.get('soul_id', session.get('user_id', 1))
         db = get_db()
         cursor = db.cursor()
-        # 취약점: soul_id 검증 없음 → 다른 사람 번호표 발급 가능
         cursor.execute(f"INSERT INTO queue_tickets (soul_id, ticket_number) VALUES ({soul_id}, FLOOR(RAND()*9000)+1000)")
         db.commit()
         cursor.execute(f"SELECT * FROM queue_tickets WHERE soul_id={soul_id} ORDER BY issued_at DESC LIMIT 1")
@@ -95,7 +94,6 @@ def write():
         content = request.form['content']
         db = get_db()
         cursor = db.cursor()
-        # 취약점: XSS (content sanitize 없음)
         cursor.execute("INSERT INTO posts (soul_id, title, content) VALUES (%s, %s, %s)",
                        (session['user_id'], title, content))
         db.commit()
@@ -116,28 +114,17 @@ def post(post_id):
 def comment(post_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
-
     content = request.form['content']
     db = get_db()
     cursor = db.cursor()
-
-    cursor.execute(
-        "INSERT INTO comments (post_id, soul_id, content) VALUES (%s, %s, %s)",
-        (post_id, session['user_id'], content)
-    )
+    cursor.execute("INSERT INTO comments (post_id, soul_id, content) VALUES (%s, %s, %s)",
+        (post_id, session['user_id'], content))
     db.commit()
-
     return redirect(url_for('post', post_id=post_id))
 
-
-    
-    
-##########
-
-    
 # ── 직원 전용 기능 ──────────────────────────────────
 
-@app.route('/employee/login', methods=['GET', 'POST'])  # /admin/login → /employee/login 으로 통일
+@app.route('/employee/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -155,7 +142,6 @@ def admin_login():
         return render_template('employee/admin_login.html', error="인증 정보가 올바르지 않습니다.")
     return render_template('employee/admin_login.html')
 
-
 @app.route('/employee/dashboard')
 def admin_dashboard():
     if 'emp_id' not in session:
@@ -166,6 +152,21 @@ def admin_dashboard():
     souls = cursor.fetchall()
     return render_template('employee/dashboard.html', souls=souls)
 
+# ⭐ 추가된 성향 업데이트 기능
+@app.route('/employee/update_alignment', methods=['POST'])
+def update_alignment():
+    if 'emp_id' not in session:
+        return redirect(url_for('admin_login'))
+    
+    soul_id = request.form.get('soul_id')
+    new_alignment = request.form.get('alignment') # '선', '악', '무' 중 하나
+    
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("UPDATE souls SET alignment = %s WHERE id = %s", (new_alignment, soul_id))
+    db.commit()
+    
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/employee/roulette', methods=['GET', 'POST'])
 def admin_roulette():
@@ -179,7 +180,5 @@ def admin_roulette():
     souls = cursor.fetchall()
     return render_template('employee/roulette.html', souls=souls)
 
-
-# 파일 맨 마지막
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
