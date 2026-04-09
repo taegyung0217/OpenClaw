@@ -26,8 +26,42 @@ CREATE TABLE IF NOT EXISTS employees (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- 나머지 테이블(queue_tickets, posts, comments)은 기존과 동일하므로 생략하거나 유지하세요.
 
+
+-- [버그 수정 1] queue_tickets 테이블 누락 → /queue POST 시 테이블 없음 오류
+CREATE TABLE IF NOT EXISTS queue_tickets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    soul_id INT NOT NULL,
+    ticket_number INT NOT NULL,
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (soul_id) REFERENCES souls(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- [버그 수정 2] posts 테이블 누락 → /board, /board/write 전체 오류
+CREATE TABLE IF NOT EXISTS posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    soul_id INT NOT NULL,
+    title VARCHAR(200),
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (soul_id) REFERENCES souls(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- [버그 수정 3] comments 테이블 누락 → /board/<id> 댓글 조회 오류
+CREATE TABLE IF NOT EXISTS comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    soul_id INT NOT NULL,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (soul_id) REFERENCES souls(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+
+
+-- 나머지 테이블(queue_tickets, posts, comments)은 기존과 동일하므로 생략하거나 유지하세요.
 INSERT INTO souls (name, email, password_hash, role, alignment) VALUES
 ('홍길동', 'hong@afterlife.com', 'password123', 'soul', '선'),
 ('나쁜놈', 'bad@afterlife.com', 'password123', 'soul', '악');

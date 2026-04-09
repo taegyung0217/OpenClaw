@@ -98,7 +98,12 @@ def write():
                        (session['user_id'], title, content))
         db.commit()
         return redirect(url_for('board'))
-    return render_template('board.html')
+    # [버그 수정 4] GET 요청 시 posts 없이 board.html 렌더링하면 템플릿에서 posts 변수 오류
+    # → board()로 리다이렉트해서 posts를 정상적으로 넘기도록 수정
+    # return render_template('board.html') 에서 아래로 수정
+    return redirect(url_for('board'))
+    
+
 
 @app.route('/board/<int:post_id>')
 def post(post_id):
@@ -159,7 +164,8 @@ def update_alignment():
         return redirect(url_for('admin_login'))
     
     soul_id = request.form.get('soul_id')
-    new_alignment = request.form.get('alignment') # '선', '악', '무' 중 하나
+    new_alignment = request.form.get('alignment') 
+    # '선', '악', '무' 중 하나
     
     db = get_db()
     cursor = db.cursor()
@@ -174,11 +180,35 @@ def admin_roulette():
         return redirect(url_for('admin_login'))
     db = get_db()
     cursor = db.cursor()
-    if request.method == 'POST':
-        return redirect(url_for('admin_dashboard'))
     cursor.execute("SELECT * FROM souls")
     souls = cursor.fetchall()
-    return render_template('employee/roulette.html', souls=souls)
 
+    if request.method == 'POST':
+        # [버그 수정 6] 룰렛 POST 시 결과 계산 없이 바로 리다이렉트하던 문제 수정
+        # → 확률값을 받아 실제 랜덤 결과를 계산하고 roulette.html에 result를 넘김
+        try:
+            prob_human = float(request.form.get('prob_human', 0.33))
+            prob_animal = float(request.form.get('prob_animal', 0.33))
+            prob_plant = float(request.form.get('prob_plant', 0.34))
+        except ValueError:
+            prob_human, prob_animal, prob_plant = 0.33, 0.33, 0.34
+
+        # 합계가 0이면 균등 배분
+        total = prob_human + prob_animal + prob_plant
+        if total <= 0:
+            prob_human, prob_animal, prob_plant = 0.33, 0.33, 0.34
+            total = 1.0
+
+        rand = random.uniform(0, total)
+        if rand < prob_human:
+            result = 'human'
+        elif rand < prob_human + prob_animal:
+            result = 'animal'
+        else:
+            result = 'plant'
+
+        return render_template('roulette.html', souls=souls, result=result)
+
+    return render_template('roulette.html', souls=souls, result=None)
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
